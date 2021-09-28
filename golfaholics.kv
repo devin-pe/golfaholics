@@ -1,0 +1,652 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import Factory kivy.factory.Factory
+
+WindowManager:
+    id: manager
+    transition: NoTransition()
+    MainWindow:
+    LoginWindow:
+    InitWindow:
+    AddPlayerWindow:
+    ScoreWindow:
+    TableWindow:
+    ConfirmationWindow:
+    FinalWindow:
+
+<MainWindow>
+    name: 'main'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    MDFloatLayout:
+        size: root.width, root.height
+        spacing:20
+        padding:50
+        MDLabel:
+            # Text Properties
+            text: 'Golfaholics Score Tracker \xa9'
+            color: app.theme_cls.primary_color
+            halign: "center"
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+            # Setting background colour
+            background_color: (1,1,1,1)
+            canvas.before:
+                Color:
+                    rgba:self.background_color
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+        Image:
+            source: 'images/logo.png'
+            size_hint: None, None
+            width: root.width
+            height: root.height/4
+            allow_stretch: True
+            pos_hint: {'center_x': 0.5, 'top': 0.65}
+
+        MDRoundFlatButton:
+            markup: True
+            text: 'Login'
+            font_size: 50
+            # Setting position and size
+            pos_hint: {'center_x': 0.5, 'top': 0.2}
+            size_hint: 2/3, None
+            height: root.height*0.2
+            on_release:
+                app.root.current = 'login'
+
+<LoginWindow>
+    name: 'login'
+
+    MDFloatLayout:
+        size: root.width, root.height
+
+        MDLabel:
+            text: 'Login'
+            font_size: '50'
+            # Setting position and size
+            size_hint: None, None
+            halign: 'center'
+            width: root.width
+            height: self.texture_size[1]
+            pos_hint: {'x':0,'top':0.95}
+            # Setting colour to default of theme
+            color: app.theme_cls.primary_color
+
+        MDTextFieldRound:
+            id:username
+            hint_text: 'Enter username'
+            icon_right: 'key-variant'
+            multiline:False
+            color_active: 0, 1, 0, 1
+            # Setting position and size
+            size_hint: None, None
+            width: root.width*0.9
+            pos_hint: {'x':0.05,'top':0.55}
+
+        MDLabel:
+            id: error
+            color: (51/255, 70/255, 66/255,1)
+            # Setting position and size
+            size_hint: None, None
+            width: root.width
+            halign: 'center'
+            pos_hint: {'x':0,'top':0.52}
+
+        MDRoundFlatButton:
+            text: 'Confirm'
+            # Setting position and size
+            size_hint: None, None
+            width: root.width*0.425
+            pos_hint: {'x':0.05,'top':0.35}
+            on_release:
+                # Compare with database and login
+                app.validate_login()
+
+        MDRoundFlatButton:
+            text: 'Clear'
+            on_release:
+                username.text = ''
+            # Setting position and size
+            size_hint: None, None
+            width: root.width*0.425
+            pos_hint: {'x':0.525,'top':0.35}
+
+        MDRoundFlatButton:
+            text: 'Go Back'
+            # Setting position and size
+            size_hint: None, None
+            width: root.width*0.9
+            pos_hint: {'x':0.05,'top':0.07}
+            on_release:
+                username.text = ''
+                error.text = ''
+                app.go_to_correct_screen()
+
+<AddPlayerWindow>
+    name:'add_player'
+    MDFloatLayout:
+
+        Image:
+            source: 'images/logo.png'
+            # Setting position and size
+            size_hint: None, None
+            width: root.width
+            height: root.height/4
+            allow_stretch: True
+            pos_hint: {'x':0,'top':0.75}
+
+        MDRoundFlatButton:
+            id: player1
+            size_hint: None, None
+            width: root.width/4
+            pos_hint: {'x':0.25,'top':0.36}
+
+        MDRoundFlatButton:
+            id: player2
+            text: 'Add Player 2'
+            on_release:
+                app.is_p2_clicked = True
+                app.validate_button()
+            size_hint: None, None
+            width: root.width/4
+            pos_hint: {'x':0.55,'top':0.36}
+
+        MDRoundFlatButton:
+            id: player3
+            text: 'Add Player 3'
+            on_release:
+                app.is_p3_clicked = True
+                app.validate_button()
+            size_hint: None, None
+            width: root.width/4
+            pos_hint: {'x':0.25,'top':0.28}
+
+        MDRoundFlatButton:
+            id: player4
+            text: 'Add Player 4'
+            on_release:
+                app.is_p4_clicked = True
+                app.validate_button()
+            size_hint: None, None
+            width: root.width/4
+            pos_hint: {'x':0.55,'top':0.28}
+
+        MDLabel:
+            id: add_player_error
+            color: (51/255, 70/255, 66/255,1)
+            size_hint: None, None
+            halign: 'center'
+            pos_hint: {'x':0,'top':0.20}
+            width: root.width
+
+        MDRoundFlatButton:
+            text: 'Confirm'
+            on_release:
+                app.root.current = 'init'
+            size_hint: None, None
+            width: root.width/4
+            pos_hint: {'x':0.25,'top':0.07}
+
+        MDRoundFlatButton:
+            text: 'Back'
+            on_release:
+                #Make function that chooses past window
+                app.root.current = 'login'
+            size_hint: None, None
+            width: root.width/4
+            pos_hint: {'x':0.55,'top':0.07}
+
+
+<InitWindow>
+    name: 'init'
+    MDFloatLayout:
+        MDLabel:
+            text: 'Create Game'
+            halign: 'center'
+            # Setting position and size
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'x':0,'top':0.95}
+            # Setting colour to default of theme
+            color: app.theme_cls.primary_color
+
+        MDLabel:
+            text: 'Game #'
+            halign: 'center'
+            # Setting position and size
+            size_hint: None, None
+            size: root.width*0.425, root.height/22
+            pos_hint: {'x':0.05,'top':0.55}
+            # Setting colour to default of theme
+            color: app.theme_cls.primary_color
+
+        MDTextFieldRect:
+            id: game_num
+            halign: 'center'
+            multiline: False
+            # Setting position and size
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.525,'top':0.55}
+
+        MDLabel:
+            id: error
+            color: (51/255, 70/255, 66/255,1)
+            # Setting position and size
+            size_hint: None, None
+            width: root.width
+            halign: 'center'
+            pos_hint: {'x':0,'top':0.35}
+
+        MDRoundFlatButton:
+            text: 'Confirm and Start Game'
+            on_release:
+                app.validate_init()
+            size_hint: None, None
+            width: root.width*0.425
+            pos_hint: {'x':0.05,'top':0.07}
+
+        MDRoundFlatButton:
+            text: 'Go Back'
+            on_release:
+                app.root.current = 'add_player'
+            size_hint: None, None
+            width: root.width*0.425
+            pos_hint: {'x':0.525,'top':0.07}
+
+<ScoreWindow>
+    name: 'score'
+    MDTabs:
+        id:score_layout
+
+<Tab1>
+    MDFloatLayout:
+        id: tab_layout
+        MDLabel:
+            id: hole_num
+            text: 'Hole ' + str(app.hole_number)
+            color: app.theme_cls.primary_color
+            font_size: '20sp'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'x':0,'top':0.98}
+
+        MDLabel:
+            id: hole_score_p1
+            text: app.kv.get_screen('add_player').ids.player1.text + ' score:'
+            color: (255/255, 0, 0, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.76}
+
+        MDTextFieldRect:
+            id: hole_user_input_p1
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.75,'top':0.74}
+
+<Tab2>
+    MDFloatLayout:
+        id: tab_layout
+        MDLabel:
+            id: hole_num
+            text: 'Hole ' + str(app.hole_number)
+            color: app.theme_cls.primary_color
+            font_size: '20sp'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'x':0,'top':0.98}
+
+        MDLabel:
+            id: hole_score_p1
+            text: app.kv.get_screen('add_player').ids.player1.text + ' score:'
+            color: (255/255, 0, 0, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.76}
+
+        MDTextFieldRect:
+            id: hole_user_input_p1
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.75,'top':0.74}
+
+        MDLabel:
+            id: hole_handicap_p1
+            text: app.kv.get_screen('add_player').ids.player1.text +'  handicap'
+            color: (255/255,0,0,0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.72}
+
+        MDLabel:
+            id: hole_score_p2
+            text: app.kv.get_screen('add_player').ids.player2.text + ' score:'
+            color: (0, 0, 255/255, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.64}
+
+        MDTextFieldRect:
+            id: hole_user_input_p2
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.75,'top':0.62}
+
+        MDLabel:
+            id: hole_handicap_p2
+            text: app.kv.get_screen('add_player').ids.player2.text + ' handicap'
+            color: (0, 0, 255/255, 0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.6}
+
+
+<Tab3>
+    MDFloatLayout:
+        id: tab_layout
+        MDLabel:
+            id: hole_num
+            text: 'Hole ' + str(app.hole_number)
+            color: app.theme_cls.primary_color
+            font_size: '20sp'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'x':0,'top':0.98}
+
+        MDLabel:
+            id: hole_score_p1
+            text: app.kv.get_screen('add_player').ids.player1.text + ' score:'
+            color: (255/255,0,0,1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.76}
+
+        MDTextFieldRect:
+            id: hole_user_input_p1
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.75,'top':0.74}
+
+        MDLabel:
+            id: hole_handicap_p1
+            text: app.kv.get_screen('add_player').ids.player1.text + ' handicap'
+            color: (255/255, 0, 0, 0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.72}
+
+        MDLabel:
+            id: hole_score_p2
+            text: app.kv.get_screen('add_player').ids.player2.text + ' score:'
+            color: (0, 0, 255/255, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.64}
+
+        MDTextFieldRect:
+            id: hole_user_input_p2
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.75,'top':0.62}
+
+        MDLabel:
+            id: hole_handicap_p2
+            text: app.kv.get_screen('add_player').ids.player2.text + ' handicap'
+            color: (0, 0, 255/255, 0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.6}
+
+        MDLabel:
+            id: hole_score_p3
+            text: app.kv.get_screen('add_player').ids.player3.text + ' score:'
+            color: (37/255, 163/255, 37/255, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.52}
+
+        MDTextFieldRect:
+            id: hole_user_input_p3
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/25
+            pos_hint: {'x':0.75,'top':0.5}
+
+        MDLabel:
+            id: hole_handicap_p3
+            text: app.kv.get_screen('add_player').ids.player3.text + ' handicap'
+            color: (37/255, 163/255, 37/255, 0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/25
+            pos_hint: {'x':0.05,'top':0.48}
+
+
+
+<Tab4>
+    MDFloatLayout:
+        id: tab_layout
+        MDLabel:
+            id: hole_num
+            text: 'Hole ' + str(app.hole_number)
+            color: app.theme_cls.primary_color
+            font_size: '20sp'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'x':0,'top':0.98}
+
+        MDLabel:
+            id: hole_score_p1
+            text: app.kv.get_screen('add_player').ids.player1.text + ' score:'
+            color: (255/255, 0, 0, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.76}
+
+        MDTextFieldRect:
+            id: hole_user_input_p1
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/30
+            pos_hint: {'x':0.75,'top':0.74}
+
+        MDLabel:
+            id: hole_handicap_p1
+            text: app.kv.get_screen('add_player').ids.player1.text + ' handicap'
+            color: (255/255,0,0,0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.72}
+
+        MDLabel:
+            id: hole_score_p2
+            text: app.kv.get_screen('add_player').ids.player2.text + ' score:'
+            color: (0, 0, 255/255, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.64}
+
+        MDTextFieldRect:
+            id: hole_user_input_p2
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/30
+            pos_hint: {'x':0.75,'top':0.62}
+
+        MDLabel:
+            id: hole_handicap_p2
+            text: app.kv.get_screen('add_player').ids.player2.text + ' handicap'
+            color: (0, 0, 255/255, 0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.6}
+
+        MDLabel:
+            id: hole_score_p3
+            text: app.kv.get_screen('add_player').ids.player3.text + ' score:'
+            color: (37/255, 163/255, 37/255, 1)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.52}
+
+        MDTextFieldRect:
+            id: hole_user_input_p3
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/30
+            pos_hint: {'x':0.75,'top':0.5}
+
+        MDLabel:
+            id: hole_handicap_p3
+            text: app.kv.get_screen('add_player').ids.player3.text + ' handicap'
+            color: (37/255, 163/255, 37/255, 0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.48}
+
+        MDLabel:
+            id: hole_score_p4
+            text: app.kv.get_screen('add_player').ids.player4.text + ' score:'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.4}
+
+        MDTextFieldRect:
+            id: hole_user_input_p4
+            multiline:False
+            halign: 'center'
+            size_hint: None, None
+            size: root.width/12, root.height/30
+            pos_hint: {'x':0.75,'top':0.38}
+
+        MDLabel:
+            id: hole_handicap_p4
+            text: app.kv.get_screen('add_player').ids.player4.text + ' handicap'
+            color: (0,0,0,0.64)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.425, root.height/30
+            pos_hint: {'x':0.05,'top':0.36}
+
+
+<TableWindow>
+    name: 'table'
+    MDFloatLayout:
+        id: table_layout
+        MDLabel:
+            id: error
+            color: (51/255, 70/255, 66/255,1)
+            # Setting position and size
+            size_hint: None, None
+            width: root.width
+            halign: 'center'
+            pos_hint: {'x':0,'top':0.2}
+
+        MDRoundFlatButton:
+            text: 'Back'
+            size_hint: None, None
+            width: root.width*0.425
+            pos_hint: {'x':0.05,'top':0.07}
+            on_release:
+                app.root.current = 'score'
+                error.text = ''
+
+        MDRoundFlatButton:
+            id: continue
+            text: 'Continue'
+            size_hint: None, None
+            width: root.width*0.425
+            pos_hint: {'x':0.525,'top':0.07}
+            on_release:
+                app.validate_table()
+
+
+<ConfirmationWindow>
+    name: 'confirmation'
+    MDFloatLayout:
+        size: root.width, root.height
+        MDLabel:
+            text: 'Clicking "Confirm Entries" will save your scores. You will have to restart the app and reenter all information if you have made a mistake so ensure it is all correct!'
+            color: (51/255, 70/255, 66/255,1)
+            halign: 'center'
+            size_hint: None, None
+            width: root.width*0.9
+            pos_hint: {'x': 0.05, 'top':0.9}
+
+        MDRoundFlatButton:
+            id: confirm
+            text: 'Confirm Entries'
+            font_size: 50
+            # Setting position and size
+            pos_hint: {'center_x': 0.5, 'top':0.6}
+            size: root.width*0.9, root.width*0.2
+            on_release:
+                app.store_data()
+                app.root.current = 'final'
+
+        MDRoundFlatButton:
+            id: back
+            text: 'Back'
+            font_size: 50
+            # Setting position and size
+            pos_hint: {'center_x': 0.5, 'top':0.48}
+            size: root.width*0.9, root.width*0.2
+            on_release:
+                app.store_data()
+                app.root.current = 'table'
+
+<FinalWindow>
+    name: 'final'
+    MDFloatLayout:
+        MDLabel:
+            text: 'You may now exit the application safely'
+            font_size: 50
+            color: (51/255, 70/255, 66/255,1)
+            halign: 'center'
+            size_hint: None, None
+            width: root.width
+            pos_hint: {'x': 0, 'top':0.6}
+

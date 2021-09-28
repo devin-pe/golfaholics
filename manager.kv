@@ -1,0 +1,384 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import Factory kivy.factory.Factory
+
+
+WindowManager:
+    transition: NoTransition()
+    MainWindow:
+    CreateGameWindow:
+    AddRegularWindow:
+    AddGuestWindow:
+    PdfMenuWindow:
+
+
+<MainWindow>
+    name: 'main'
+    FloatLayout:
+
+        Label:
+            text: 'Golfaholics Score Manager \xa9'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+
+        Label:
+            text: 'What would you like to do?'
+            font_size: 30
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.81}
+
+        Button:
+            text: 'Create Game'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/10
+            pos_hint: {'center_x': 0.5,'top':0.69}
+            on_release:
+                app.root.current = 'create_game'
+
+        Button:
+            text: 'Add Regular'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/10
+            pos_hint: {'center_x': 0.5,'top':0.57}
+            on_release:
+                app.root.current = 'add_regular'
+                app.on_regular_screen = True
+
+        Button:
+            text: 'Add Guest'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/10
+            pos_hint: {'center_x': 0.5,'top':0.45}
+            on_release: app.root.current = 'add_guest'
+
+        Button:
+            text: 'Create PDFs'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/10
+            pos_hint: {'center_x': 0.5,'top':0.33}
+            on_release: app.root.current = 'pdf_menu'
+
+
+<CreateGameWindow>
+    name: 'create_game'
+    FloatLayout:
+        id: game_layout
+        Label:
+            text: 'Create Game'
+            halign: 'center'
+            font_size: 30
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+
+        Spinner:
+            id: course_menu
+            text: 'Choose a course'
+            values: ['Kikuoka', 'Preisch France', 'Preisch Germany', 'Preisch Luxembourg', 'Grand Ducal', 'Longwy', 'Amneville', 'Baden Hills', 'Belenhaff', 'Bitburg']
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.5, 'top': 0.8}
+            on_text: app.make_hole_options()
+
+        Spinner:
+            id: options_menu
+            text: 'Choose hole options'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.5, 'top': 0.67}
+
+        Label:
+            text: 'Enter Week Number'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.54}
+
+        TextInput:
+            id: week_num
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.54}
+
+        Label:
+            text: 'Enter Year'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.43}
+
+        TextInput:
+            id: year
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.43}
+
+        Label:
+            text: 'Enter Password'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.3}
+
+        TextInput:
+            id: password
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.3}
+
+        Button:
+            id: confirm
+            text: 'Confirm Changes'
+            size_hint: None, None
+            size: root.width*(1/3) , root.height/16
+            pos_hint: {'center_x': 0.75,'top':0.17}
+            on_release:
+                app.create_game()
+                app.on_create_game_screen = True
+
+        Button:
+            text: 'Return to Main Screen'
+            size_hint: None, None
+            size: root.width*(1/3) , root.height/16
+            pos_hint: {'center_x': 0.25,'top':0.17}
+            on_release:
+                app.on_create_game_screen = True
+                app.return_to_main()
+
+<AddRegularWindow>
+    name: 'add_regular'
+    FloatLayout:
+        Label:
+            text: 'Add Regular'
+            font_size: 30
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+
+        Label:
+            text: 'Enter Full Name'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.75}
+
+        TextInput:
+            id: username
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.75}
+
+        Label:
+            text: 'Enter Handicap'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.6}
+
+        TextInput:
+            id: handicap
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.6}
+
+        Label:
+            text: 'Enter Password'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.45}
+
+        TextInput:
+            id: password
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.45}
+
+        Button:
+            id: confirm
+            text: 'Confirm Changes'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/8
+            pos_hint: {'center_x': 0.5,'top':0.3}
+            on_release:
+                app.on_regular_screen = True
+                app.add_user()
+
+        Button:
+            text: 'Return to Main Screen'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/8
+            pos_hint: {'center_x': 0.5,'top':0.15}
+            on_release:
+                app.on_regular_screen = True
+                app.return_to_main()
+
+
+<AddGuestWindow>
+    name: 'add_guest'
+    FloatLayout:
+        Label:
+            text: 'Add Guest'
+            font_size: 30
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+
+        Label:
+            text: 'Enter Full Name'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.75}
+
+        TextInput:
+            id: username
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.75}
+
+        Label:
+            text: 'Enter Handicap'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.6}
+
+        TextInput:
+            id: handicap
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.6}
+
+        Label:
+            text: 'Enter Password'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.45}
+
+        TextInput:
+            id: password
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.45}
+
+        Button:
+            id: confirm
+            text: 'Confirm Changes'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/8
+            pos_hint: {'center_x': 0.5,'top':0.3}
+            on_release:
+                app.on_guest_screen = True
+                app.add_user()
+
+        Button:
+            text: 'Return to Main Screen'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/8
+            pos_hint: {'center_x': 0.5,'top':0.15}
+            on_release:
+                app.on_guest_screen = True
+                app.return_to_main()
+
+
+<PdfMenuWindow>
+    name: 'pdf_menu'
+    FloatLayout:
+        Label:
+            text: 'PDF Creation Menu'
+            font_size: 30
+            halign: 'center'
+            size_hint: None, None
+            size: root.width, root.height/22
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+
+        Label:
+            text: 'Enter Password'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.5, root.height/18
+            pos_hint: {'center_x': 0.25, 'top': 0.75}
+
+        TextInput:
+            id: password
+            multiline: False
+            size_hint: None, None
+            size: root.width*0.4, root.height/18
+            pos_hint: {'center_x': 0.75, 'top': 0.75}
+
+        Button:
+            id: confirm
+            text: 'Confirm'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/10
+            pos_hint: {'center_x': 0.5,'top':0.5}
+            on_release: app.create_pdfs() # Replace with method that creates all pdfs
+
+        Button:
+            text: 'Return to Main Screen'
+            size_hint: None, None
+            size: root.width*0.6 , root.height/10
+            pos_hint: {'center_x': 0.5,'top':0.35}
+            on_release:
+                app.on_pdf_menu_screen = True
+                app.return_to_main()
+
+
+<CreateGamePopup@Popup>
+    auto_dismiss: False
+    size_hint: 0.4, 0.4
+    pos_hint: {'center_x':0.5, 'top': 0.9}
+    title: 'Confirmation'
+    FloatLayout:
+
+        Label:
+            text: 'Game {0}\n at {1} {2} was created.'.format(str(app.game_num), app.course, app.options)
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.05, root.height/18
+            pos_hint: {'center_x': 0.5, 'top': 0.75}
+
+        Button:
+            text: 'Close'
+            size_hint: None, None
+            size: root.width*0.15 , root.height/8
+            pos_hint: {'center_x': 0.5,'top':0.45}
+            on_release: root.dismiss()
+
+
+<AddPlayerPopup@Popup>
+    auto_dismiss: False
+    size_hint: 0.4, 0.4
+    pos_hint: {'center_x':0.5, 'top': 0.9}
+    title: 'Confirmation'
+    FloatLayout:
+
+        Label:
+            text: app.fullname + '\n has been added to the DB \n with username ' + app.username + ' and handicap ' + app.handicap + '.'
+            halign: 'center'
+            size_hint: None, None
+            size: root.width*0.05, root.height/18
+            pos_hint: {'center_x': 0.5, 'top': 0.75}
+
+        Button:
+            text: 'Close'
+            size_hint: None, None
+            size: root.width*0.15 , root.height/8
+            pos_hint: {'center_x': 0.5,'top':0.45}
+            on_release: root.dismiss()
